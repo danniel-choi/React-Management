@@ -32,17 +32,37 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
+app.post('/api/customers2', (req, res) => {
+    let sql = "INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?)";
+    let image = req.body.image;
+    let name = req.body.name;
+    let birthday = req.body.birthday;
+    let gender = req.body.gender;
+    let job = req.body.job;
+    let params = [image, name, birthday, gender, job];
+    console.log(params);
+    connection.query(sql, params,
+        (err, rows, fields) => {
+            res.send(rows);
+            console.log(err);
+            console.log(rows);
+        }   
+    );
+    
+});
+
 app.use('/image', express.static('./upload'));
 
 app.post('api/customers', upload.single('image'), (req, res) => {
-    let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?)';
+    
+    let sql = "INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?)";
     let image = '/image/' + req.file.filename;
     let name = req.body.name;
     let birthday = req.body.birthday;
     let gender = req.body.gender;
     let job = req.body.job;
     let params = [image, name, birthday, gender, job];
-    
+
     connection.query(sql, params,
         (err, rows, fields) => {
             res.send(rows);
